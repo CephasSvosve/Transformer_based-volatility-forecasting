@@ -4,10 +4,8 @@
 Created on Mon Oct 27 01:34:14 2025
 
 @author: svosve
-"""
 
-#!/usr/bin/env python3
-"""
+
 vol_seq2seq_encoder_decoder.py — multi-input encoder–decoder Transformer
 
 - Encoder inputs (T × 3): [log_ret, rvol_feat, vixd_feat]
@@ -65,7 +63,7 @@ SEED     = 42
 # Data / model hyperparameters
 BATCH_SIZE   = 128
 BLOCK_SIZE   = 21         # encoder context length (past steps)
-HORIZON      = 30          # decoder length (future steps)
+HORIZON      = 1          # decoder length (future steps)
 EMBED_DIM    = 8
 N_HEADS      = 4
 N_LAYERS_ENC = 2
@@ -73,7 +71,7 @@ N_LAYERS_DEC = 2
 DROPOUT      = 0.3
 LR_SCALE     = 1.0
 WARMUP_STEPS = 4000
-EPOCHS       = 200
+EPOCHS       = 100
 GRAD_CLIP    = 1.0
 PATIENCE     = 1000
 WEIGHT_DECAY = 1e-3       # AdamW
@@ -420,7 +418,7 @@ def plot_spx_and_series(df_pre_price, df_post_price,
         ax.grid(True, linestyle="--", linewidth=0.6, alpha=GRID_ALPHA)
         ax.xaxis.set_major_locator(MaxNLocator(nbins=XTICK_COUNT))
         ax.xaxis.set_major_formatter(YEAR_FMT)
-        ax.legend(fontsize=LEGEND_FONTSIZE, frameon=False, loc="upper left")
+        ax.legend(fontsize=LEGEND_FONTSIZE, frameon=False, loc="upper center")
 
     one(axes[1,0], df_pre_var,  r2_pre,  "RVOL vs Transformer pred. (In-Sample)")
     one(axes[1,1], df_post_var, r2_post, "RVOL vs Transformer pred. (Out-of-Sample)")
@@ -559,10 +557,10 @@ def fit_and_evaluate(df, y_col, base_var_col, tag):
 
     if tag.upper().startswith("RVOL"):
         ylab = "OMI RVOL (annualised %)"
-        supt = "SPX and RVOL with Transformer Predictions"
+        supt = ""
     else:
         ylab = "VIX"
-        supt = "SPX and VIX with Transformer Predictions"
+        supt = ""
 
     plot_spx_and_series(df_pre_price, df_post_price, df_pre_plot, r2_in, df_post_plot, r2_out, ylab, supt, f"{tag}_timeseries.png")
 
